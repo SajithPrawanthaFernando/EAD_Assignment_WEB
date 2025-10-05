@@ -76,10 +76,6 @@ export default function Login() {
             {message}
           </Typography>
         )}
-        <Box mt={3} textAlign="center" fontSize={12}>
-          <div>Backoffice Admin: admin@ev.local / Admin#123</div>
-          <div>Operator: operator@ev.local / Operator#123</div>
-        </Box>
       </Paper>
     </Box>
   );
