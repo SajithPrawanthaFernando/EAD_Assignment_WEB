@@ -86,42 +86,40 @@ export default function StationsPage() {
       })),
     };
 
-// Add this mapping at the top of your component or in a separate constants file
-const TYPE_MAPPING = {
-  'DC': 2,
-  'AC': 1,
-  // Add other types as needed
-};
+    // Add this mapping at the top of your component or in a separate constants file
+    const TYPE_MAPPING = {
+      DC: 2,
+      AC: 1,
+      // Add other types as needed
+    };
 
+    // When preparing the payload for API:
+    const preparePayloadForAPI = (formData) => {
+      return {
+        ...formData,
+        type: TYPE_MAPPING[formData.type] || formData.type,
+      };
+    };
 
+    // In your save function:
+    try {
+      const apiPayload = preparePayloadForAPI(payload);
+      console.log("Payload being sent:", apiPayload);
 
-// When preparing the payload for API:
-const preparePayloadForAPI = (formData) => {
-  return {
-    ...formData,
-    type: TYPE_MAPPING[formData.type] || formData.type
-  };
-};
-
-// In your save function:
-try {
-  const apiPayload = preparePayloadForAPI(payload);
-  console.log("Payload being sent:", apiPayload);
-  
-  if (editMode) {
-    await api.put("/stations", apiPayload);
-    toast.success("Station updated successfully");
-  } else {
-    await api.post("/stations", apiPayload);
-    toast.success("Station added successfully");
-  }
-  resetForm();
-  fetchStations();
-} catch (err) {
-  console.error("Error saving station:", err);
-  console.error("Response data:", err.response?.data);
-  toast.error("Failed to save station");
-}
+      if (editMode) {
+        await api.put("/stations", apiPayload);
+        toast.success("Station updated successfully");
+      } else {
+        await api.post("/stations", apiPayload);
+        toast.success("Station added successfully");
+      }
+      resetForm();
+      fetchStations();
+    } catch (err) {
+      console.error("Error saving station:", err);
+      console.error("Response data:", err.response?.data);
+      toast.error("Failed to save station");
+    }
   };
   const toggleActive = async (station) => {
     try {

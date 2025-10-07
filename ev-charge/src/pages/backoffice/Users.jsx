@@ -71,7 +71,7 @@ export default function Users() {
   const addUser = async () => {
     try {
       await api.post("/users", { email, role });
-       toast.success("User added successfully");
+      toast.success("User added successfully");
       setEmail("");
       setRole("");
       fetchUsers();
@@ -83,7 +83,7 @@ export default function Users() {
   const deleteUser = async (userId) => {
     try {
       await api.delete(`/users/${userId}`);
-       toast.success("User added successfully");
+      toast.success("User added successfully");
       fetchUsers();
     } catch (err) {
       console.error("Error deleting user:", err);

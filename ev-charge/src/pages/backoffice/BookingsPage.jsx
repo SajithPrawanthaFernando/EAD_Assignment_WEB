@@ -8,7 +8,7 @@ import {
   TextField,
   Button,
   Grid,
-   Avatar,
+  Avatar,
   IconButton,
   Table,
   TableBody,
@@ -30,7 +30,7 @@ import {
   Assignment as BookingIcon,
   CheckCircle as ActiveIcon,
   Cancel as CancelIcon,
-   AddCircle as AddCircleIcon,
+  AddCircle as AddCircleIcon,
   ToggleOn as ToggleOnIcon,
   ToggleOff as ToggleOffIcon,
   TrendingUp as TrendingUpIcon,
@@ -113,26 +113,26 @@ export default function BookingPage() {
       startTimeUtc,
     };
 
-  try {
+    try {
       if (editMode && editingId) {
-  // Check if reservation is at least 12 hours away
-  const original = bookings.find((b) => b.id === editingId);
-  if (!isMoreThan12HoursAway(original.startTimeUtc)) {
-    toast.error("Cannot update a reservation less than 12 hours away");
-    return;
-  }
+        // Check if reservation is at least 12 hours away
+        const original = bookings.find((b) => b.id === editingId);
+        if (!isMoreThan12HoursAway(original.startTimeUtc)) {
+          toast.error("Cannot update a reservation less than 12 hours away");
+          return;
+        }
 
-  const updatePayload = {
-    id: editingId,
-    ...payload,
-  };
-  await api.patch(`/bookings`, updatePayload);
-  toast.success("Booking updated successfully");
-} else {
-  await api.post("/bookings", payload);
-  toast.success("Booking created successfully");
-}
-}catch (err) {
+        const updatePayload = {
+          id: editingId,
+          ...payload,
+        };
+        await api.patch(`/bookings`, updatePayload);
+        toast.success("Booking updated successfully");
+      } else {
+        await api.post("/bookings", payload);
+        toast.success("Booking created successfully");
+      }
+    } catch (err) {
       console.error("Error saving booking:", err.response?.data || err.message);
       toast.error("Failed to save booking");
     }
@@ -171,13 +171,19 @@ export default function BookingPage() {
       b.stationId?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       b.slotId?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-const totalBookings = bookings.length;
-  const activeBookings = bookings.filter(b => (b.status?.toLowerCase() || "") === "active").length;
-  const canceledBookings = bookings.filter(b => (b.status?.toLowerCase() || "") === "cancelled").length;
+  const totalBookings = bookings.length;
+  const activeBookings = bookings.filter(
+    (b) => (b.status?.toLowerCase() || "") === "active"
+  ).length;
+  const canceledBookings = bookings.filter(
+    (b) => (b.status?.toLowerCase() || "") === "cancelled"
+  ).length;
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: colors.white }}>
       <Sidebar />
-      <Box sx={{ flexGrow: 1, bgcolor: colors.white, minHeight: "100vh", mt: 8 }}>
+      <Box
+        sx={{ flexGrow: 1, bgcolor: colors.white, minHeight: "100vh", mt: 8 }}
+      >
         <Header />
 
         <Box sx={{ flexGrow: 1, p: 4 }}>
@@ -185,14 +191,17 @@ const totalBookings = bookings.length;
 
           {/* Header Section */}
           <Box sx={{ mb: 3 }}>
-            <Typography variant="h5" sx={{ color: colors.navy, fontWeight: 600, mb: 1 }}>
+            <Typography
+              variant="h5"
+              sx={{ color: colors.navy, fontWeight: 600, mb: 1 }}
+            >
               Booking Management
             </Typography>
             <Typography variant="body2" sx={{ color: colors.slate }}>
               Manage EV charging bookings with reservation validations ⚡
             </Typography>
           </Box>
-   {/* Stats Cards */}
+          {/* Stats Cards */}
           <Grid container spacing={12} sx={{ mb: 5 }}>
             <Grid item xs={12} md={4}>
               <Card
@@ -310,7 +319,13 @@ const totalBookings = bookings.length;
             </Grid>
           </Grid>
           {/* Add / Edit Booking Form */}
-          <Card sx={{ mb: 4, borderRadius: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+          <Card
+            sx={{
+              mb: 4,
+              borderRadius: 3,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            }}
+          >
             <CardContent sx={{ p: 3 }}>
               <Box sx={{ display: "flex", alignItems: "center", mb: 3 }}>
                 <AddIcon sx={{ color: colors.navy, mr: 1 }} />
@@ -327,7 +342,12 @@ const totalBookings = bookings.length;
                     value={ownerNic}
                     onChange={(e) => setOwnerNic(e.target.value)}
                     size="small"
-                    sx={{ "& .MuiOutlinedInput-root": { bgcolor: colors.lightGrey, borderRadius: 2 } }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: colors.lightGrey,
+                        borderRadius: 2,
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -337,7 +357,12 @@ const totalBookings = bookings.length;
                     value={stationId}
                     onChange={(e) => setStationId(e.target.value)}
                     size="small"
-                    sx={{ "& .MuiOutlinedInput-root": { bgcolor: colors.lightGrey, borderRadius: 2 } }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: colors.lightGrey,
+                        borderRadius: 2,
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -347,7 +372,12 @@ const totalBookings = bookings.length;
                     value={slotId}
                     onChange={(e) => setSlotId(e.target.value)}
                     size="small"
-                    sx={{ "& .MuiOutlinedInput-root": { bgcolor: colors.lightGrey, borderRadius: 2 } }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: colors.lightGrey,
+                        borderRadius: 2,
+                      },
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} md={3}>
@@ -359,7 +389,12 @@ const totalBookings = bookings.length;
                     value={startTimeUtc}
                     onChange={(e) => setStartTimeUtc(e.target.value)}
                     size="small"
-                    sx={{ "& .MuiOutlinedInput-root": { bgcolor: colors.lightGrey, borderRadius: 2 } }}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        bgcolor: colors.lightGrey,
+                        borderRadius: 2,
+                      },
+                    }}
                   />
                 </Grid>
 
@@ -385,7 +420,11 @@ const totalBookings = bookings.length;
                     fullWidth
                     variant="outlined"
                     onClick={resetForm}
-                    sx={{ borderRadius: 2, textTransform: "none", fontWeight: 600 }}
+                    sx={{
+                      borderRadius: 2,
+                      textTransform: "none",
+                      fontWeight: 600,
+                    }}
                   >
                     Reset
                   </Button>
@@ -395,9 +434,14 @@ const totalBookings = bookings.length;
           </Card>
 
           {/* Booking Table */}
-          <Card sx={{ borderRadius: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}>
+          <Card
+            sx={{ borderRadius: 3, boxShadow: "0 2px 8px rgba(0,0,0,0.08)" }}
+          >
             <CardContent sx={{ p: 3 }}>
-              <Typography variant="h6" sx={{ color: colors.navy, mb: 3, fontWeight: 600 }}>
+              <Typography
+                variant="h6"
+                sx={{ color: colors.navy, mb: 3, fontWeight: 600 }}
+              >
                 Booking List
               </Typography>
 
@@ -408,7 +452,10 @@ const totalBookings = bookings.length;
                 fullWidth
                 sx={{
                   mb: 3,
-                  "& .MuiOutlinedInput-root": { borderRadius: 2, bgcolor: colors.lightGrey },
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: 2,
+                    bgcolor: colors.lightGrey,
+                  },
                 }}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -425,22 +472,45 @@ const totalBookings = bookings.length;
                 <Table>
                   <TableHead>
                     <TableRow sx={{ bgcolor: colors.lightGrey }}>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>Owner NIC</TableCell>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>Station ID</TableCell>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>Slot ID</TableCell>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>Start Time (UTC)</TableCell>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>Status</TableCell>
-                      <TableCell align="center" sx={{ color: colors.navy, fontWeight: 600 }}>Actions</TableCell>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Owner NIC
+                      </TableCell>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Station ID
+                      </TableCell>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Slot ID
+                      </TableCell>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Start Time (UTC)
+                      </TableCell>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Status
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        sx={{ color: colors.navy, fontWeight: 600 }}
+                      >
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {filteredBookings.map((b) => (
-                      <TableRow key={b.id} sx={{ "&:hover": { bgcolor: colors.lightGrey }, transition: "background-color 0.2s" }}>
+                      <TableRow
+                        key={b.id}
+                        sx={{
+                          "&:hover": { bgcolor: colors.lightGrey },
+                          transition: "background-color 0.2s",
+                        }}
+                      >
                         <TableCell>{b.ownerNic}</TableCell>
                         <TableCell>{b.stationId}</TableCell>
                         <TableCell>{b.slotId}</TableCell>
-                        <TableCell>{new Date(b.startTimeUtc).toLocaleString()}</TableCell>
-                         <TableCell>{b.status}</TableCell>
+                        <TableCell>
+                          {new Date(b.startTimeUtc).toLocaleString()}
+                        </TableCell>
+                        <TableCell>{b.status}</TableCell>
                         <TableCell align="center">
                           <Tooltip title="Edit Booking">
                             <IconButton
