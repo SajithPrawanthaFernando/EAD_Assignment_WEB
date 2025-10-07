@@ -1,27 +1,35 @@
-import { useContext, createContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState({
-    token: localStorage.getItem("jwt") || null,
-    role: localStorage.getItem("role") || null,
-  });
+  const [user, setUser] = useState(null);
 
-  const login = (token, role) => {
-    localStorage.setItem("jwt", token);
+  // Load user data from localStorage on mount
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    
+    if (token && role) {
+      setUser({ role, token });
+    }
+  }, []);
+
+  const login = (token, role, callback) => {
+    localStorage.setItem("token", token);
     localStorage.setItem("role", role);
-    setAuth({ token, role });
+    setUser({ role, token });
+    if (callback) callback();
   };
 
   const logout = () => {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem("token");
     localStorage.removeItem("role");
-    setAuth({ token: null, role: null });
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ auth, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

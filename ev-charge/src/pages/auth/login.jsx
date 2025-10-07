@@ -2,34 +2,35 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, TextField, Typography, Paper, Stack } from "@mui/material";
-import useAuth from "../../hooks/useAuth"; // Auth context hook
+import useAuth from "../../hooks/useAuth";
+import API from "../../api/api"; // Make sure path is correct
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // context login function
+  const { login } = useAuth();
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setMessage("");
+  const handleLogin = async (e) => {
+  e.preventDefault();
+  setMessage("");
 
-    // Mock login
-    if (email === "admin@ev.local" && password === "Admin#123") {
-      const mockToken = "mock-backoffice-jwt-token";
-      login(mockToken, "Backoffice");
-      setMessage("Login successful!");
-      navigate("/backoffice/evowners");
-    } else if (email === "operator@ev.local" && password === "Operator#123") {
-      const mockToken = "mock-operator-jwt-token";
-      login(mockToken, "StationOperator");
-      setMessage("Login successful!");
-      navigate("/operator");
-    } else {
-      setMessage("Invalid credentials");
-    }
-  };
+  try {
+    const response = await API.post("/auth/login", { email, password });
+    console.log("Backend response:", response.data); // Debug
+    
+    const { token, role } = response.data;
+
+    login(token, role, () => {
+      console.log("Login callback executed"); // Debug
+      navigate("/overview");
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    setMessage(error.response?.data?.message || "Login failed");
+  }
+};
 
   return (
     <Box
@@ -69,10 +70,7 @@ export default function Login() {
           </Stack>
         </form>
         {message && (
-          <Typography
-            sx={{ mt: 2, textAlign: "center" }}
-            color={message === "Login successful!" ? "green" : "error"}
-          >
+          <Typography sx={{ mt: 2, textAlign: "center" }} color="error">
             {message}
           </Typography>
         )}
