@@ -1,4 +1,13 @@
-import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, Typography, Drawer } from "@mui/material"
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Box,
+  Typography,
+  Drawer,
+} from "@mui/material";
 import {
   People as PeopleIcon,
   DirectionsCar as CarIcon,
@@ -8,9 +17,9 @@ import {
   Business as BusinessIcon,
   AccountCircle as AccountIcon,
   Settings as SettingsIcon,
-} from "@mui/icons-material"
+} from "@mui/icons-material";
 
-const DRAWER_WIDTH = 240
+const DRAWER_WIDTH = 240;
 
 const colors = {
   navy: "#0d2141",
@@ -18,7 +27,7 @@ const colors = {
   slate: "#6e7989",
   lightGrey: "#F8F9FA",
   white: "#FFFFFF",
-}
+};
 
 const iconMap = {
   Overview: <DashboardIcon />,
@@ -29,7 +38,7 @@ const iconMap = {
   Companies: <BusinessIcon />,
   Account: <AccountIcon />,
   Settings: <SettingsIcon />,
-}
+};
 
 export default function Sidebar() {
   // ✅ Sidebar navigation links (added here)
@@ -39,10 +48,9 @@ export default function Sidebar() {
     { text: "EV Owners", path: "/ev-owners" },
     { text: "Stations", path: "/stations" },
     { text: "Bookings", path: "/bookings" },
-    { text: "Companies", path: "/companies" },
     { text: "Account", path: "/account" },
     { text: "Settings", path: "/settings" },
-  ]
+  ];
 
   return (
     <Drawer
@@ -55,7 +63,7 @@ export default function Sidebar() {
           boxSizing: "border-box",
           backgroundColor: colors.navy,
           borderRight: "none",
-          marginTop:"50px",
+          marginTop: "50px",
         },
       }}
     >
@@ -131,5 +139,5 @@ export default function Sidebar() {
         </Box>
       </Box>
     </Drawer>
-  )
+  );
 }
