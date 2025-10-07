@@ -116,7 +116,7 @@ export default function Overview() {
         {/* Page Content */}
         <Box sx={{ flexGrow: 1, p: 4 }}>
           <Typography
-            variant="h5"
+            variant="h4"
             sx={{ color: colors.navy, fontWeight: 600, mt: 3 }}
           >
             Overview Dashboard
