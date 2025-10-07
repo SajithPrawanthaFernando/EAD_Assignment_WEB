@@ -138,7 +138,7 @@ export default function Users() {
           {/* Header Section */}
           <Box sx={{ mb: 3 }}>
             <Typography
-              variant="h5"
+              variant="h4"
               sx={{ color: colors.navy, fontWeight: 600, mb: 1 }}
             >
               User Management Dashboard
