@@ -52,6 +52,18 @@ const colors = {
   green: "#4CAF50",
   red: "#F44336",
 };
+const getStatusStyle = (status) => {
+  switch (status) {
+    case "Cancelled":
+      return { color: "#FFEBEE", bgcolor: "#D32F2F" };
+    case "Completed":
+      return { color: "#E8F5E9", bgcolor: "#2E7D32" };
+    case "Approved":
+      return { color: "#E3F2FD", bgcolor: "#1565C0" };
+    default:
+      return { color: "#ECEFF1", bgcolor: "#455A64" };
+  }
+};
 
 export default function BookingPage() {
   const [bookings, setBookings] = useState([]);
@@ -63,7 +75,7 @@ export default function BookingPage() {
   const [editMode, setEditMode] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-  // ✅ Fetch all bookings
+  //  Fetch all bookings
   const fetchBookings = async () => {
     try {
       const res = await api.get("/bookings");
@@ -78,7 +90,7 @@ export default function BookingPage() {
     fetchBookings();
   }, []);
 
-  // ✅ Validation helpers
+  //  Validation helpers
   const isWithin7Days = (reservationTime) => {
     const now = new Date();
     const resTime = new Date(reservationTime);
@@ -94,7 +106,7 @@ export default function BookingPage() {
     return diffHours >= 12;
   };
 
-  // ✅ Save or update booking
+  //  Save or update booking
   const saveBooking = async () => {
     if (!ownerNic || !stationId || !slotId || !startTimeUtc) {
       toast.error("Please fill in all fields");
@@ -138,7 +150,7 @@ export default function BookingPage() {
     }
   };
 
-  // ✅ Delete (Cancel) booking
+  //  Delete (Cancel) booking
   const deleteBooking = async (b) => {
     if (!isMoreThan12HoursAway(b.startTimeUtc)) {
       toast.error("Cannot cancel a reservation less than 12 hours away");
@@ -155,7 +167,7 @@ export default function BookingPage() {
     }
   };
 
-  // ✅ Reset form
+  //  Reset form
   const resetForm = () => {
     setOwnerNic("");
     setStationId("");
@@ -173,7 +185,7 @@ export default function BookingPage() {
   );
   const totalBookings = bookings.length;
   const activeBookings = bookings.filter(
-    (b) => (b.status?.toLowerCase() || "") === "active"
+    (b) => (b.status?.toLowerCase() || "") === "approved"
   ).length;
   const canceledBookings = bookings.filter(
     (b) => (b.status?.toLowerCase() || "") === "cancelled"
@@ -484,9 +496,7 @@ export default function BookingPage() {
                       <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
                         Start Time (UTC)
                       </TableCell>
-                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
-                        Status
-                      </TableCell>
+
                       <TableCell
                         align="center"
                         sx={{ color: colors.navy, fontWeight: 600 }}
@@ -510,7 +520,19 @@ export default function BookingPage() {
                         <TableCell>
                           {new Date(b.startTimeUtc).toLocaleString()}
                         </TableCell>
-                        <TableCell>{b.status}</TableCell>
+
+                        {/*  Status Cell */}
+                        <TableCell>
+                          <Chip
+                            label={b.status}
+                            sx={{
+                              ...getStatusStyle(b.status),
+                              fontWeight: 600,
+                              borderRadius: "15px",
+                            }}
+                            size="small"
+                          />
+                        </TableCell>
                         <TableCell align="center">
                           <Tooltip title="Edit Booking">
                             <IconButton

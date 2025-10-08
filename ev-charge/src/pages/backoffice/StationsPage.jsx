@@ -344,7 +344,7 @@ export default function StationsPage() {
                 <Grid item xs={12} md={6}>
                   <TextField
                     fullWidth
-                    label="Slots (comma-separated labels)"
+                    label="Slots"
                     value={slots.map((s) => s.label).join(", ")}
                     onChange={(e) =>
                       setSlots(
@@ -409,8 +409,8 @@ export default function StationsPage() {
                   sx={{
                     borderRadius: 3,
                     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    width: 400, // ✅ fixed width
-                    height: 250, // optional: makes boxes uniform height
+                    width: 400, 
+                    height: 250, 
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",

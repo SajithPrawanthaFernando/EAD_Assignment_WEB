@@ -63,6 +63,10 @@ export default function EVOwnersPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const saveOwner = async () => {
+    if (!validateFields()) {
+      toast.error("Please fix the form errors");
+      return;
+    }
     if (!nic || !name || !phone || !email) {
       toast.error("Please fill in NIC, Name, Phone, and Email");
       return;
@@ -118,10 +122,47 @@ export default function EVOwnersPage() {
     setPassword("");
     setEditMode(false);
   };
+  // Validation state
+  const [errors, setErrors] = useState({
+    nic: "",
+    name: "",
+    phone: "",
+    email: "",
+    password: "",
+  });
 
-  const deleteOwner = async (ownerNic) => {
+  const validateFields = () => {
+    let newErrors = { nic: "", name: "", phone: "", email: "", password: "" };
+    let valid = true;
+
+    if (!/^(?:\d{9}[VvXx]|\d{12})$/.test(nic)) {
+      newErrors.nic = "Enter a valid NIC (e.g. 123456789V or 12 digits)";
+      valid = false;
+    }
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+      newErrors.name = "Name can only contain letters and spaces";
+      valid = false;
+    }
+    if (!/^0\d{9}$/.test(phone)) {
+      newErrors.phone = "Enter a valid 10-digit phone number (e.g. 0712345678)";
+      valid = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = "Enter a valid email address";
+      valid = false;
+    }
+    if (!editMode && password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters long";
+      valid = false;
+    }
+
+    setErrors(newErrors);
+    return valid;
+  };
+
+  const deleteOwner = async (nic) => {
     try {
-      await api.delete(`/ev-owners/${ownerNic}`);
+      await api.delete(`/ev-owners/${nic}`);
       fetchOwners();
       toast.success("Owner deleted successfully");
     } catch (err) {
@@ -320,14 +361,20 @@ export default function EVOwnersPage() {
                 </Typography>{" "}
               </Box>{" "}
               <Grid container spacing={2}>
-                {" "}
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <TextField
                     fullWidth
                     label="NIC"
                     value={nic}
-                    onChange={(e) => setNic(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value.toUpperCase(); // auto uppercase V
+                      // Allow only 0-9 and optionally V/X at the end
+                      const nicPattern = /^(?:\d{0,12}|(\d{0,9}[VX]))$/;
+
+                      if (nicPattern.test(value)) {
+                        setNic(value);
+                      }
+                    }}
                     variant="outlined"
                     size="small"
                     sx={{
@@ -336,16 +383,24 @@ export default function EVOwnersPage() {
                         borderRadius: 2,
                       },
                     }}
+                    error={!!errors.nic}
+                    helperText={errors.nic}
                     disabled={editMode}
-                  />{" "}
-                </Grid>{" "}
+                  />
+                </Grid>
+
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <TextField
                     fullWidth
                     label="Name"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow only letters and spaces — filter out anything else
+                      if (/^[A-Za-z\s]*$/.test(value)) {
+                        setName(value);
+                      }
+                    }}
                     variant="outlined"
                     size="small"
                     sx={{
@@ -354,15 +409,23 @@ export default function EVOwnersPage() {
                         borderRadius: 2,
                       },
                     }}
-                  />{" "}
-                </Grid>{" "}
+                    error={!!errors.name}
+                    helperText={errors.name}
+                  />
+                </Grid>
+
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <TextField
                     fullWidth
                     label="Phone"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow only digits — prevent letters/symbols
+                      if (/^[0-9]*$/.test(value)) {
+                        setPhone(value);
+                      }
+                    }}
                     variant="outlined"
                     size="small"
                     sx={{
@@ -371,10 +434,12 @@ export default function EVOwnersPage() {
                         borderRadius: 2,
                       },
                     }}
-                  />{" "}
-                </Grid>{" "}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
+                  />
+                </Grid>
+
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <TextField
                     fullWidth
                     label="Email"
@@ -388,11 +453,13 @@ export default function EVOwnersPage() {
                         borderRadius: 2,
                       },
                     }}
-                  />{" "}
-                </Grid>{" "}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                  />
+                </Grid>
+
                 {!editMode && (
                   <Grid item xs={12} md={3}>
-                    {" "}
                     <TextField
                       fullWidth
                       label="Password"
@@ -407,11 +474,13 @@ export default function EVOwnersPage() {
                           borderRadius: 2,
                         },
                       }}
-                    />{" "}
+                      error={!!errors.password}
+                      helperText={errors.password}
+                    />
                   </Grid>
-                )}{" "}
+                )}
+
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <Button
                     fullWidth
                     variant="contained"
@@ -425,12 +494,11 @@ export default function EVOwnersPage() {
                       "&:hover": { bgcolor: colors.teal },
                     }}
                   >
-                    {" "}
-                    {editMode ? "Update" : "Save"}{" "}
-                  </Button>{" "}
-                </Grid>{" "}
+                    {editMode ? "Update" : "Save"}
+                  </Button>
+                </Grid>
+
                 <Grid item xs={12} md={3}>
-                  {" "}
                   <Button
                     fullWidth
                     variant="outlined"
@@ -441,11 +509,10 @@ export default function EVOwnersPage() {
                       fontWeight: 600,
                     }}
                   >
-                    {" "}
-                    Reset{" "}
-                  </Button>{" "}
-                </Grid>{" "}
-              </Grid>{" "}
+                    Reset
+                  </Button>
+                </Grid>
+              </Grid>
             </CardContent>{" "}
           </Card>
           {/* Owner Table */}

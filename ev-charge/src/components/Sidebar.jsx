@@ -41,7 +41,7 @@ const iconMap = {
 };
 
 export default function Sidebar() {
-  // ✅ Sidebar navigation links (added here)
+  //  Sidebar navigation links (added here)
   const links = [
     { text: "Overview", path: "/overview" },
     { text: "Users", path: "/users" },
@@ -69,7 +69,7 @@ export default function Sidebar() {
     >
       <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
         {/* Logo/Brand */}
-        <Box sx={{ p: 3, borderBottom: `1px solid ${colors.teal}` }}>
+        <Box sx={{ p: 3, borderBottom: `1px solid ${colors.teal}`,mt:3 }}>
           <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
             <Box
               sx={{
