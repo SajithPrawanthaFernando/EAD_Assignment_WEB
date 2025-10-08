@@ -283,9 +283,9 @@ export default function Users() {
             sx={{
               borderRadius: 3,
               boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              bgcolor: colors.white, // ✅ White background
+              bgcolor: colors.white, 
               mt: 4,
-              mx: 0, // ✅ Horizontal margin
+              mx: 0, 
             }}
           >
             <CardContent>
@@ -305,8 +305,8 @@ export default function Users() {
                   alignItems: "center",
                   mt: 4,
                   "& .MuiOutlinedInput-root": {
-                    bgcolor: "#f5f5f5", // ✅ light grey background (replace with colors.lightGrey if you have a colors object)
-                    borderRadius: 2, // ✅ rounded corners
+                    bgcolor: "#f5f5f5", 
+                    borderRadius: 2,
                   },
                 }}
               >
@@ -355,7 +355,6 @@ export default function Users() {
           </Card>
 
           {/* User List */}
-          {/* User List */}
           <Card
             sx={{
               borderRadius: 3,
@@ -387,7 +386,7 @@ export default function Users() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Prevent page reload
+                    e.preventDefault(); 
                   }
                 }}
                 InputProps={{
