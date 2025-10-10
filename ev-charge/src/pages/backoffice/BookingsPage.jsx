@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../api/api";
+import { CheckCircle, Cancel, HourglassEmpty } from "@mui/icons-material";
+import { Assignment } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -35,10 +37,8 @@ import {
   ToggleOff as ToggleOffIcon,
   TrendingUp as TrendingUpIcon,
 } from "@mui/icons-material";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import Sidebar from "../../components/Sidebar";
 import Header from "../../components/Header";
 
@@ -150,6 +150,41 @@ export default function BookingPage() {
     }
   };
 
+  // Approve Booking
+  const approveBooking = async (id) => {
+    try {
+      await api.patch(`/bookings/${id}/approve`);
+      toast.success("Booking approved successfully");
+      fetchBookings();
+    } catch (err) {
+      console.error("Error approving booking:", err);
+      toast.error("Failed to approve booking");
+    }
+  };
+
+  // Start Charging Booking
+  const startChargingBooking = async (id) => {
+    try {
+      await api.patch(`/bookings/${id}/start-charging`);
+      toast.success("Charging started successfully");
+      fetchBookings();
+    } catch (err) {
+      console.error("Error starting charging:", err);
+      toast.error("Failed to start charging");
+    }
+  };
+
+  // Complete Booking
+  const completeBooking = async (id) => {
+    try {
+      await api.patch(`/bookings/${id}/complete`);
+      toast.success("Booking completed successfully");
+      fetchBookings();
+    } catch (err) {
+      console.error("Error completing booking:", err);
+      toast.error("Failed to complete booking");
+    }
+  };
   //  Delete (Cancel) booking
   const deleteBooking = async (b) => {
     if (!isMoreThan12HoursAway(b.startTimeUtc)) {
@@ -496,10 +531,12 @@ export default function BookingPage() {
                       <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
                         Start Time (UTC)
                       </TableCell>
-
+  <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                        Status
+                      </TableCell>
                       <TableCell
                         align="center"
-                        sx={{ color: colors.navy, fontWeight: 600 }}
+                        sx={{ color: colors.navy, fontWeight: 600, }}
                       >
                         Actions
                       </TableCell>
@@ -534,6 +571,40 @@ export default function BookingPage() {
                           />
                         </TableCell>
                         <TableCell align="center">
+                          {/* Approve */}
+                          <Tooltip title="Approve Booking">
+                            <IconButton
+                              size="small"
+                              onClick={() => approveBooking(b.id)}
+                              sx={{ color: colors.green, mr: 1 }}
+                            >
+                              <CheckCircle fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+
+                          {/* Start Charging */}
+                          <Tooltip title="Start Charging">
+                            <IconButton
+                              size="small"
+                              onClick={() => startChargingBooking(b.id)}
+                              sx={{ color: colors.blue, mr: 1 }}
+                            >
+                              <ToggleOnIcon fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+
+                          {/* Complete */}
+                          <Tooltip title="Complete Booking">
+                            <IconButton
+                              size="small"
+                              onClick={() => completeBooking(b.id)}
+                              sx={{ color: colors.teal, mr: 1 }}
+                            >
+                              <Assignment fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+
+                          {/* Edit */}
                           <Tooltip title="Edit Booking">
                             <IconButton
                               size="small"
@@ -550,6 +621,8 @@ export default function BookingPage() {
                               <EditIcon fontSize="small" />
                             </IconButton>
                           </Tooltip>
+
+                          {/* Delete  */}
                           <Tooltip title="Cancel Booking">
                             <IconButton
                               size="small"

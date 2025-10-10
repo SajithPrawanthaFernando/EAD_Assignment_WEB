@@ -370,7 +370,6 @@ export default function EVOwnersPage() {
                       const value = e.target.value.toUpperCase(); // auto uppercase V
                       // Allow only 0-9 and optionally V/X at the end
                       const nicPattern = /^(?:\d{0,12}|(\d{0,9}[VX]))$/;
-
                       if (nicPattern.test(value)) {
                         setNic(value);
                       }
@@ -413,7 +412,6 @@ export default function EVOwnersPage() {
                     helperText={errors.name}
                   />
                 </Grid>
-
                 <Grid item xs={12} md={3}>
                   <TextField
                     fullWidth
