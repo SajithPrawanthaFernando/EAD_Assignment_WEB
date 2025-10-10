@@ -10,18 +10,16 @@ import Account from "./pages/AccountPage";
 import useAuth from "./hooks/useAuth";
 
 function App() {
-  const { user, setUser } = useAuth(); // user state from your Auth context
+  const { user, setUser } = useAuth(); 
   const token = localStorage.getItem("token");
 
-  // On app load, initialize user from localStorage if not set
   React.useEffect(() => {
     if (!user && token) {
-      const storedUser = JSON.parse(localStorage.getItem("user")); // store user on login
+      const storedUser = JSON.parse(localStorage.getItem("user")); 
       if (storedUser) setUser(storedUser);
     }
   }, [user, token, setUser]);
 
-  // Redirect to login if no token
   if (!token) {
     return (
       <Router>
@@ -33,7 +31,6 @@ function App() {
     );
   }
 
-  // Logged-in routes
   return (
     <Router>
       <Routes>
