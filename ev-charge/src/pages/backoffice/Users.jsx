@@ -283,9 +283,9 @@ export default function Users() {
             sx={{
               borderRadius: 3,
               boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-              bgcolor: colors.white, 
+              bgcolor: colors.white,
               mt: 4,
-              mx: 0, 
+              mx: 0,
             }}
           >
             <CardContent>
@@ -305,7 +305,7 @@ export default function Users() {
                   alignItems: "center",
                   mt: 4,
                   "& .MuiOutlinedInput-root": {
-                    bgcolor: "#f5f5f5", 
+                    bgcolor: "#f5f5f5",
                     borderRadius: 2,
                   },
                 }}
@@ -386,7 +386,7 @@ export default function Users() {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); 
+                    e.preventDefault();
                   }
                 }}
                 InputProps={{

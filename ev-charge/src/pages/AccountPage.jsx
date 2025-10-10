@@ -1,5 +1,15 @@
 import { useState, useEffect } from "react";
-import { Box, Container, Paper, Avatar, Typography, Button, Grid, Divider, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Container,
+  Paper,
+  Avatar,
+  Typography,
+  Button,
+  Grid,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import useAuth from "../hooks/useAuth";
@@ -14,11 +24,16 @@ const colors = {
 // Helper function to decode JWT
 const decodeJWT = (token) => {
   try {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(''));
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map(function (c) {
+          return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+        })
+        .join("")
+    );
     return JSON.parse(jsonPayload);
   } catch (error) {
     console.error("Failed to decode JWT:", error);
@@ -34,7 +49,7 @@ const AccountPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
-      
+
       if (!token) {
         console.log("No token found");
         setLoading(false);
@@ -44,15 +59,15 @@ const AccountPage = () => {
       // Decode JWT to get user ID
       const decodedToken = decodeJWT(token);
       console.log("Decoded token:", decodedToken);
-      
+
       const userId = decodedToken?.sub;
-      
+
       if (!userId) {
         console.log("No user ID in token");
         setLoading(false);
         return;
       }
-      
+
       try {
         setLoading(true);
         console.log("Fetching user with ID:", userId);
@@ -72,7 +87,14 @@ const AccountPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -80,23 +102,32 @@ const AccountPage = () => {
 
   if (!userData) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "100vh",
+        }}
+      >
         <Typography color="error">Failed to load user data.</Typography>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: colors.lightGrey }}>
+    <Box
+      sx={{ display: "flex", minHeight: "100vh", bgcolor: colors.lightGrey }}
+    >
       <Sidebar />
 
       <Box sx={{ flexGrow: 1 }}>
         <Header />
 
-        <Box sx={{ py: 4 ,mt:5}}>
-          <Container sx={{width:"500px"}}>
+        <Box sx={{ py: 4, mt: 5 }}>
+          <Container sx={{ width: "500px" }}>
             <Grid container spacing={3} justifyContent="center">
-              <Grid item xs={12} md={6}  sx={{width:"800px"}}>
+              <Grid item xs={12} md={6} sx={{ width: "800px" }}>
                 <Paper
                   elevation={3}
                   sx={{
@@ -108,14 +139,17 @@ const AccountPage = () => {
                     borderRadius: 3,
                   }}
                 >
-                  <Avatar
-                    src={img}
-                    sx={{ width: 120, height: 120, mb: 2 }}
-                  />
-                  <Typography variant="h5" sx={{ color: colors.navy, fontWeight: 600, mb: 1 }}>
+                  <Avatar src={img} sx={{ width: 120, height: 120, mb: 2 }} />
+                  <Typography
+                    variant="h5"
+                    sx={{ color: colors.navy, fontWeight: 600, mb: 1 }}
+                  >
                     {userData.name || userData.username || "User"}
                   </Typography>
-                  <Typography variant="body1" sx={{ color: colors.navy, mb: 1 }}>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: colors.navy, mb: 1 }}
+                  >
                     Role: {"Admin"}
                   </Typography>
                   <Typography variant="body1" sx={{ color: "#6e7989", mb: 2 }}>
