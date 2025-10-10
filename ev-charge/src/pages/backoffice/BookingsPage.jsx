@@ -531,12 +531,12 @@ export default function BookingPage() {
                       <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
                         Start Time (UTC)
                       </TableCell>
-  <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
+                      <TableCell sx={{ color: colors.navy, fontWeight: 600 }}>
                         Status
                       </TableCell>
                       <TableCell
                         align="center"
-                        sx={{ color: colors.navy, fontWeight: 600, }}
+                        sx={{ color: colors.navy, fontWeight: 600 }}
                       >
                         Actions
                       </TableCell>
