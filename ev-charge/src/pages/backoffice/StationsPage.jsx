@@ -314,7 +314,13 @@ export default function StationsPage() {
                     fullWidth
                     label="Latitude"
                     value={lat}
-                    onChange={(e) => setLat(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow only digits, decimal point, and minus sign
+                      if (/^-?\d*\.?\d*$/.test(value)) {
+                        setLat(value);
+                      }
+                    }}
                     size="small"
                     sx={{
                       "& .MuiOutlinedInput-root": {
@@ -330,7 +336,13 @@ export default function StationsPage() {
                     fullWidth
                     label="Longitude"
                     value={lng}
-                    onChange={(e) => setLng(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow only digits, decimal point, and minus sign
+                      if (/^-?\d*\.?\d*$/.test(value)) {
+                        setLng(value);
+                      }
+                    }}
                     size="small"
                     sx={{
                       "& .MuiOutlinedInput-root": {
@@ -409,8 +421,8 @@ export default function StationsPage() {
                   sx={{
                     borderRadius: 3,
                     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
-                    width: 400, 
-                    height: 250, 
+                    width: 400,
+                    height: 250,
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",

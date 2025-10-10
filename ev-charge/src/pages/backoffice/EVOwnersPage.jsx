@@ -63,10 +63,6 @@ export default function EVOwnersPage() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const saveOwner = async () => {
-    if (!validateFields()) {
-      toast.error("Please fix the form errors");
-      return;
-    }
     if (!nic || !name || !phone || !email) {
       toast.error("Please fill in NIC, Name, Phone, and Email");
       return;
@@ -130,35 +126,6 @@ export default function EVOwnersPage() {
     email: "",
     password: "",
   });
-
-  const validateFields = () => {
-    let newErrors = { nic: "", name: "", phone: "", email: "", password: "" };
-    let valid = true;
-
-    if (!/^(?:\d{9}[VvXx]|\d{12})$/.test(nic)) {
-      newErrors.nic = "Enter a valid NIC (e.g. 123456789V or 12 digits)";
-      valid = false;
-    }
-    if (!/^[A-Za-z\s]+$/.test(name)) {
-      newErrors.name = "Name can only contain letters and spaces";
-      valid = false;
-    }
-    if (!/^0\d{9}$/.test(phone)) {
-      newErrors.phone = "Enter a valid 10-digit phone number (e.g. 0712345678)";
-      valid = false;
-    }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      newErrors.email = "Enter a valid email address";
-      valid = false;
-    }
-    if (!editMode && password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters long";
-      valid = false;
-    }
-
-    setErrors(newErrors);
-    return valid;
-  };
 
   const deleteOwner = async (nic) => {
     try {
@@ -367,10 +334,9 @@ export default function EVOwnersPage() {
                     label="NIC"
                     value={nic}
                     onChange={(e) => {
-                      const value = e.target.value.toUpperCase(); // auto uppercase V
+                      const value = e.target.value.toUpperCase();
                       // Allow only 0-9 and optionally V/X at the end
                       const nicPattern = /^(?:\d{0,12}|(\d{0,9}[VX]))$/;
-
                       if (nicPattern.test(value)) {
                         setNic(value);
                       }
@@ -413,7 +379,6 @@ export default function EVOwnersPage() {
                     helperText={errors.name}
                   />
                 </Grid>
-
                 <Grid item xs={12} md={3}>
                   <TextField
                     fullWidth
@@ -421,9 +386,13 @@ export default function EVOwnersPage() {
                     value={phone}
                     onChange={(e) => {
                       const value = e.target.value;
-                      // Allow only digits — prevent letters/symbols
-                      if (/^[0-9]*$/.test(value)) {
+                      // Allow only digits up to 10 characters
+                      if (/^\d{0,10}$/.test(value)) {
                         setPhone(value);
+                        // Clear error when user starts typing
+                        if (errors.phone) {
+                          setErrors({ ...errors, phone: "" });
+                        }
                       }
                     }}
                     variant="outlined"
@@ -455,6 +424,7 @@ export default function EVOwnersPage() {
                     }}
                     error={!!errors.email}
                     helperText={errors.email}
+                    disabled={editMode}
                   />
                 </Grid>
 
